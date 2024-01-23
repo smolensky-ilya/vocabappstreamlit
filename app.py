@@ -7,9 +7,15 @@ database = Db()
 pars_per_page = 5
 
 
+def rev_link_gen(chunk):
+    return f"<a href='https://context.reverso.net/translation/english-russian/{chunk}' " \
+           f"target='_blank' style='color: white; text-decoration: none;'><i>{chunk}</i></a>"
+
+
 def main():
     columns = st.columns(2)
     for each in columns:
+        each.write('col')
         sub_cols = each.columns(3)
         for each1 in sub_cols:
             each1.write('1')
@@ -29,13 +35,13 @@ def main():
             col1, col2, col3, col4 = st.columns(4)
             for i, each in enumerate(exp_list):
                 if i % 4 == 0:
-                    col1.markdown(f"<i>{each}</i>", unsafe_allow_html=True)
+                    col1.markdown(rev_link_gen(each), unsafe_allow_html=True)
                 elif i % 4 == 1:
-                    col2.markdown(f"<i>{each}</i>", unsafe_allow_html=True)
+                    col2.markdown(rev_link_gen(each), unsafe_allow_html=True)
                 elif i % 4 == 2:
-                    col3.markdown(f"<i>{each}</i>", unsafe_allow_html=True)
+                    col3.markdown(rev_link_gen(each), unsafe_allow_html=True)
                 else:
-                    col4.markdown(f"<i>{each}</i>", unsafe_allow_html=True)
+                    col4.markdown(rev_link_gen(each), unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
