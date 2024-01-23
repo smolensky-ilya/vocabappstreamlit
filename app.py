@@ -1,5 +1,3 @@
-from docx import Document
-import os
 import pandas as pd
 import random
 import streamlit as st
