@@ -9,7 +9,7 @@ pars_per_page = 5
 
 def rev_link_gen(chunk):
     return f"<a href='https://context.reverso.net/translation/english-russian/{chunk}' " \
-           f"target='_blank' style='color: white; text-decoration: none;'><i>{chunk}</i></a>"
+           f"target='_blank' style='color: inherit; text-decoration: none;'><i>{chunk}</i></a>"
 
 
 def main():
