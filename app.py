@@ -22,21 +22,25 @@ def chunk_iterator(list_of_chunks):
 def main():
     # SIDEBAR
     st.sidebar.subheader('Settings')
-    pars_per_page = st.sidebar.number_input('Paragraphs per page', min_value=1, max_value=10, value=pars_per_page_def)
-    chunk_columns = st.sidebar.number_input('Number of chunk cols', min_value=1, max_value=10, value=chunk_columns_def)
-    chunks_per_column = st.sidebar.number_input('Chunks per col', min_value=1, max_value=10, value=chunks_per_column_def)
-    # MAIN
-    columns = st.columns(2)
-    for each in columns:
-        each.write('col')
-        sub_cols = each.columns(3)
-        for each1 in sub_cols:
-            each1.write('1')
+    pars_per_page = st.sidebar.number_input('Paragraphs / page', min_value=1, max_value=10, value=pars_per_page_def)
+    chunk_columns = st.sidebar.number_input('Chunk cols', min_value=1, max_value=10, value=chunk_columns_def)
+    chunks_per_column = st.sidebar.number_input('Chunks / col', min_value=1, max_value=10, value=chunks_per_column_def)
+    limits_for_db = chunks_per_column * chunk_columns
 
-    refresh = st.button('Get Some Speaking Material', use_container_width=True)
-    if refresh:
+    # MAIN
+    get_other_chunks = st.button('Get Some Chunks', use_container_width=True)
+    get_sc_mats = st.button('Get Some Speaking Material', use_container_width=True)
+
+    if get_other_chunks:
+        cols = st.columns(chunk_columns)
+        expressions = chunk_iterator(database.get_other_chunks(limit=limits_for_db)['expression'].to_list())
+        for each in cols:
+            for _ in range(chunks_per_column):
+                each.markdown(rev_link_gen(next(expressions)), unsafe_allow_html=True)
+
+    if get_sc_mats:
         data = database.get_club_topics(pars_per_page)
-        expressions = database.get_expressions(topics=data['topic'], limit=chunk_columns * chunks_per_column)
+        expressions = database.get_expressions(topics=data['topic'], limit=limits_for_db)
         for index, row in data.iterrows():
             st.write(f"---")
             st.markdown(f"<i>{row['topic'].replace('_', ' ')}</i>", unsafe_allow_html=True)
@@ -45,13 +49,10 @@ def main():
             st.write(f"{row['answers']}")
             st.write(f"")
             exp_list = chunk_iterator(expressions.query('topic == @row["topic"]')['expressions'].to_list())
-            cols_t = st.columns(chunk_columns)
-            for each in cols_t:
+            cols = st.columns(chunk_columns)
+            for each in cols:
                 for _ in range(chunks_per_column):
-                    try:
-                        each.markdown(rev_link_gen(next(exp_list)), unsafe_allow_html=True)
-                    except StopIteration:
-                        raise ValueError('Increase the number of chunks loaded for the DB!')
+                    each.markdown(rev_link_gen(next(exp_list)), unsafe_allow_html=True)
 
 
 if __name__ == "__main__":

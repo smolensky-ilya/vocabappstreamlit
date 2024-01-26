@@ -17,5 +17,5 @@ class Db:
                            f"rn FROM {secrets['club_expression_table']} WHERE topic IN ({joining})) AS subquery "
                            f"WHERE rn <= {limit}", self.engine).iloc[:, :-1]
 
-    def get_other_chunks(self):
-        return pd.read_sql(f"SELECT * FROM {secrets['other_chunks_table']}", self.engine)
+    def get_other_chunks(self, limit):
+        return pd.read_sql(f"SELECT * FROM {secrets['other_chunks_table']} ORDER BY rand() LIMIT {limit}", self.engine)
