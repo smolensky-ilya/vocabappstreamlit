@@ -2,17 +2,30 @@ import streamlit as st
 from db_connection import Db
 
 
-st.set_page_config(page_title='Speaking Club Material')
+st.set_page_config(page_title='Speaking Club Material', initial_sidebar_state='collapsed')
 database = Db()
-pars_per_page = 5
+pars_per_page_def = 5
+chunk_columns_def = 4
+chunks_per_column_def = 5
 
 
 def rev_link_gen(chunk):
-    return f"<a href='https://context.reverso.net/translation/english-russian/{chunk}' " \
-           f"target='_blank' style='color: inherit; text-decoration: none;'><i>{chunk}</i></a>"
+    return f'<a href="https://context.reverso.net/translation/english-russian/{chunk}" ' \
+           f'target="_blank" style="color: inherit; text-decoration: none;"><i>{chunk}</i></a>'
+
+
+def chunk_iterator(list_of_chunks):
+    for each in list_of_chunks:
+        yield each
 
 
 def main():
+    # SIDEBAR
+    st.sidebar.subheader('Settings')
+    pars_per_page = st.sidebar.number_input('Paragraphs per page', min_value=1, max_value=10, value=pars_per_page_def)
+    chunk_columns = st.sidebar.number_input('Number of chunk cols', min_value=1, max_value=10, value=chunk_columns_def)
+    chunks_per_column = st.sidebar.number_input('Chunks per col', min_value=1, max_value=10, value=chunks_per_column_def)
+    # MAIN
     columns = st.columns(2)
     for each in columns:
         each.write('col')
@@ -23,7 +36,7 @@ def main():
     refresh = st.button('Get Some Speaking Material', use_container_width=True)
     if refresh:
         data = database.get_club_topics(pars_per_page)
-        expressions = database.get_expressions(topics=data['topic'], limit=20)
+        expressions = database.get_expressions(topics=data['topic'], limit=chunk_columns * chunks_per_column)
         for index, row in data.iterrows():
             st.write(f"---")
             st.markdown(f"<i>{row['topic'].replace('_', ' ')}</i>", unsafe_allow_html=True)
@@ -31,17 +44,14 @@ def main():
             st.write(f"")
             st.write(f"{row['answers']}")
             st.write(f"")
-            exp_list = expressions.query('topic == @row["topic"]')['expressions'].to_list()
-            col1, col2, col3, col4 = st.columns(4)
-            for i, each in enumerate(exp_list):
-                if i % 4 == 0:
-                    col1.markdown(rev_link_gen(each), unsafe_allow_html=True)
-                elif i % 4 == 1:
-                    col2.markdown(rev_link_gen(each), unsafe_allow_html=True)
-                elif i % 4 == 2:
-                    col3.markdown(rev_link_gen(each), unsafe_allow_html=True)
-                else:
-                    col4.markdown(rev_link_gen(each), unsafe_allow_html=True)
+            exp_list = chunk_iterator(expressions.query('topic == @row["topic"]')['expressions'].to_list())
+            cols_t = st.columns(chunk_columns)
+            for each in cols_t:
+                for _ in range(chunks_per_column):
+                    try:
+                        each.markdown(rev_link_gen(next(exp_list)), unsafe_allow_html=True)
+                    except StopIteration:
+                        raise ValueError('Increase the number of chunks loaded for the DB!')
 
 
 if __name__ == "__main__":
