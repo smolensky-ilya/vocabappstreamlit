@@ -1,4 +1,5 @@
 import streamlit as st
+import hashlib
 from db_connection import Db
 from gpt import Gpt
 
@@ -56,6 +57,11 @@ def chunk_iterator(list_of_chunks):
         yield each
 
 
+def generate_unique_key(text, index):
+    hash_object = hashlib.md5(text.encode())
+    return hash_object.hexdigest() + "_" + str(index)
+
+
 def main():
     # MAIN
     st.header(':rocket: :blue[_Vocab Booster 3000_]', divider='rainbow')
@@ -71,10 +77,10 @@ def main():
             cols = st.columns(chunk_columns)
             iterator = chunk_iterator(st.session_state.other_expressions)
             for i, each in enumerate(cols):
-                for _ in range(chunks_per_column):
+                for j in range(chunks_per_column):
                     button_text = next(iterator)
-                    each.button(button_text, on_click=apply_explainer(what=button_text), key="exp_" + button_text +
-                                                                                             str(i) + str(_))
+                    unique_key = generate_unique_key(button_text, f"{i}_{j}")
+                    each.button(button_text, on_click=apply_explainer(what=button_text), key=unique_key)
 
     if 'explain_prompt' in st.session_state:
         if st.session_state.explain_prompt is not None:
@@ -96,10 +102,10 @@ def main():
                 cols = st.columns(chunk_columns)
                 iterator = chunk_iterator(expressions.query('topic == @row["topic"]')['expressions'].to_list())
                 for i, each in enumerate(cols):
-                    for _ in range(chunks_per_column):
+                    for j in range(chunks_per_column):
                         button_text = next(iterator)
-                        each.button(button_text, on_click=apply_explainer(what=button_text), key="sc_" + button_text +
-                                                                                                 str(i) + str(_))
+                        unique_key = generate_unique_key(button_text, f"{i}_{j}")
+                        each.button(button_text, on_click=apply_explainer(what=button_text), key=unique_key)
 
     if st.session_state.open_chat:
         for message in st.session_state.messages:
