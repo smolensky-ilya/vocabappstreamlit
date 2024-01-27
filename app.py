@@ -1,12 +1,28 @@
 import streamlit as st
 from db_connection import Db
-
+from gpt import Gpt
 
 st.set_page_config(page_title='Speaking Club Material', initial_sidebar_state='collapsed')
 database = Db()
 pars_per_page_def = 5
 chunk_columns_def = 4
 chunks_per_column_def = 5
+
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# OPEN CHAT
+if "open_chat" not in st.session_state:
+    st.session_state.open_chat = False
+
+# OPEN CHAT
+if "gpt" not in st.session_state:
+    st.session_state.gpt = Gpt()
+
+
+def toggle_chat():
+    st.session_state.open_chat = not st.session_state.open_chat
 
 
 def rev_link_gen(chunk):
@@ -26,10 +42,15 @@ def main():
     chunk_columns = st.sidebar.number_input('Chunk cols', min_value=1, max_value=10, value=chunk_columns_def)
     chunks_per_column = st.sidebar.number_input('Chunks / col', min_value=1, max_value=10, value=chunks_per_column_def)
     limits_for_db = chunks_per_column * chunk_columns
+    if st.sidebar.button('Clean chat history'):
+        st.session_state.messages = []
+        st.session_state.gpt = Gpt()
 
     # MAIN
     get_other_chunks = st.button('Get Some Chunks', use_container_width=True)
     get_sc_mats = st.button('Get Some Speaking Material', use_container_width=True)
+    st.button(f'{"Open" if not st.session_state.open_chat else "Close"} Chat', use_container_width=True,
+              on_click=toggle_chat)
 
     if get_other_chunks:
         cols = st.columns(chunk_columns)
@@ -53,6 +74,20 @@ def main():
             for each in cols:
                 for _ in range(chunks_per_column):
                     each.markdown(rev_link_gen(next(exp_list)), unsafe_allow_html=True)
+
+    if st.session_state.open_chat:
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
+        if chat_prompt := st.chat_input(placeholder="Your message", max_chars=None):
+            with st.chat_message("user"):
+                st.write(f"{chat_prompt}")
+                st.session_state.messages.append({"role": "user", "content": chat_prompt})
+            with st.chat_message("assistant"):
+                gpt_reply = st.session_state.gpt.ask_gpt(chat_prompt)
+                st.write(f"{gpt_reply}")
+                st.session_state.messages.append({"role": "assistant", "content": gpt_reply})
 
 
 if __name__ == "__main__":
