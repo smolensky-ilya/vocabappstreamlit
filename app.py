@@ -3,7 +3,7 @@ from random import randint
 from db_connection import Db
 from gpt import Gpt
 
-st.set_page_config(page_title='Speaking Club Material', initial_sidebar_state='collapsed')
+st.set_page_config(page_title='Vocab Booster 3000', initial_sidebar_state='collapsed')
 database = Db()
 pars_per_page = 5
 chunk_columns = 4
