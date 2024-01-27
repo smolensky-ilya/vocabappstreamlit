@@ -73,7 +73,8 @@ def main():
             for i, each in enumerate(cols):
                 for _ in range(chunks_per_column):
                     button_text = next(iterator)
-                    each.button(button_text, on_click=apply_explainer(what=button_text), key="exp_"+button_text+i+_)
+                    each.button(button_text, on_click=apply_explainer(what=button_text), key="exp_" + button_text +
+                                                                                             str(i) + str(_))
 
     if 'explain_prompt' in st.session_state:
         if st.session_state.explain_prompt is not None:
@@ -97,7 +98,8 @@ def main():
                 for i, each in enumerate(cols):
                     for _ in range(chunks_per_column):
                         button_text = next(iterator)
-                        each.button(button_text, on_click=apply_explainer(what=button_text), key="sc_"+button_text+i+_)
+                        each.button(button_text, on_click=apply_explainer(what=button_text), key="sc_" + button_text +
+                                                                                                 str(i) + str(_))
 
     if st.session_state.open_chat:
         for message in st.session_state.messages:
