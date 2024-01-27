@@ -70,10 +70,10 @@ def main():
         if st.session_state.other_expressions is not None:
             cols = st.columns(chunk_columns)
             iterator = chunk_iterator(st.session_state.other_expressions)
-            for each in cols:
+            for i, each in enumerate(cols):
                 for _ in range(chunks_per_column):
                     button_text = next(iterator)
-                    each.button(button_text, on_click=apply_explainer(what=button_text), key="exp_" + button_text)
+                    each.button(button_text, on_click=apply_explainer(what=button_text), key="exp_"+button_text+i+_)
 
     if 'explain_prompt' in st.session_state:
         if st.session_state.explain_prompt is not None:
@@ -94,10 +94,10 @@ def main():
                 st.write(f"")
                 cols = st.columns(chunk_columns)
                 iterator = chunk_iterator(expressions.query('topic == @row["topic"]')['expressions'].to_list())
-                for each in cols:
+                for i, each in enumerate(cols):
                     for _ in range(chunks_per_column):
                         button_text = next(iterator)
-                        each.button(button_text, on_click=apply_explainer(what=button_text), key="sc_" + button_text)
+                        each.button(button_text, on_click=apply_explainer(what=button_text), key="sc_"+button_text+i+_)
 
     if st.session_state.open_chat:
         for message in st.session_state.messages:
