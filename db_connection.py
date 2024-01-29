@@ -19,3 +19,10 @@ class Db:
 
     def get_other_chunks(self, limit):
         return pd.read_sql(f"SELECT * FROM {secrets['other_chunks_table']} ORDER BY rand() LIMIT {limit}", self.engine)
+
+    def get_random_exp_from_both(self, limit):
+        return pd.read_sql(f"SELECT * FROM "
+                           f"(SELECT expressions FROM {secrets['club_expression_table']} "
+                           f"UNION "
+                           f"SELECT expression FROM {secrets['other_chunks_table']}) as exp "
+                           f"ORDER BY rand() LIMIT {limit}", self.engine)
