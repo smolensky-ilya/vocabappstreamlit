@@ -70,7 +70,7 @@ def generate_materials():
 
 
 def toggle_chat():
-    clean_session_state(exception=['open_chat', 'other_expressions'])
+    #clean_session_state(exception=['open_chat', 'other_expressions'])
     st.session_state.open_chat = not st.session_state.open_chat
 
 
@@ -122,6 +122,7 @@ def main():
                 st.markdown(message["content"])
 
         if chat_prompt := st.chat_input(placeholder="Your message", max_chars=1000):
+            del st.session_state.explain_prompt
             with st.chat_message("user"):
                 st.write(f"{chat_prompt}")
                 st.session_state.messages.append({"role": "user", "content": chat_prompt})
