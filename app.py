@@ -39,9 +39,9 @@ def insert_chunk_columns(prefix, interator_list):
                                                                                      str(randint(1, 10000)))
 
 
-def clean_session_state(exception: str = None):
+def clean_session_state(exception: list = None):
     for key in st.session_state.keys():
-        if key not in ['gpt', 'messages'] + ([exception] if exception is not None else []):
+        if key not in ['gpt', 'messages'] + (exception if exception is not None else []):
             del st.session_state[key]
 
 
@@ -70,6 +70,7 @@ def generate_materials():
 
 
 def toggle_chat():
+    del st.session_state.explain_prompt
     st.session_state.open_chat = not st.session_state.open_chat
 
 
