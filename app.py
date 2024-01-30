@@ -70,7 +70,7 @@ def generate_materials():
 
 
 def toggle_chat():
-    clean_session_state(exception=['other_expressions'])
+    clean_session_state(exception=['open_chat', 'other_expressions'])
     st.session_state.open_chat = not st.session_state.open_chat
 
 
