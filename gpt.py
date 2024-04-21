@@ -36,7 +36,8 @@ class Gpt:
 
 
 def main():
-    pass
+    test = Gpt()
+    print(test.ask_gpt("Please generate a short question on a modern topic to discuss using Advanced English"))
 
 
 if __name__ == "__main__":
