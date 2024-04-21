@@ -60,8 +60,10 @@ def get_sc_mats():
 def generate_materials():
     clean_session_state()
     st.session_state.chunks_for_generation = database.get_random_exp_from_both(limits_for_db)['expressions'].to_list()
-    prompt = f'Please generate a short question on a modern topic to discuss using Advanced English and these chunks:' \
-             f'{", ".join(st.session_state.chunks_for_generation[:2])}. ' \
+    #prompt = f'Please generate a short question on a modern topic to discuss using Advanced English and these chunks:' \
+    #        f'{", ".join(st.session_state.chunks_for_generation[:2])}. ' \
+    #         f'Please just write the question and nothing else.'
+    prompt = f'Please generate a short question on a modern topic to discuss using Advanced English.' \
              f'Please just write the question and nothing else.'
     st.session_state.generated_question = st.session_state.gpt.ask_gpt(prompt)
     prompt = 'Please write a paragraph answering the question using advanced English and the same chunks.' \
