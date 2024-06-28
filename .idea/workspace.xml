@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b520e236-96b5-4c59-920c-5552d66ad968" name="Changes" comment="Fixed the GPT prompt.">
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+    <list default="true" id="b520e236-96b5-4c59-920c-5552d66ad968" name="Changes" comment="Another GPT prompt fix.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gpt.py" beforeDir="false" afterPath="$PROJECT_DIR$/gpt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -302,7 +304,28 @@
       <option name="project" value="LOCAL" />
       <updated>1706704170318</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Fixed the chat open bug.">
+      <created>1706704329849</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1706704329849</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Fixed the GPT prompt + library updates.">
+      <created>1713701018641</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1713701018641</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Another GPT prompt fix.">
+      <created>1713701203100</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1713701203100</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -331,6 +354,9 @@
     <MESSAGE value="Fixed an issue with the chat" />
     <MESSAGE value="A new fix of the chat issue" />
     <MESSAGE value="Fixed the GPT prompt." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed the GPT prompt." />
+    <MESSAGE value="Fixed the chat open bug." />
+    <MESSAGE value="Fixed the GPT prompt + library updates." />
+    <MESSAGE value="Another GPT prompt fix." />
+    <option name="LAST_COMMIT_MESSAGE" value="Another GPT prompt fix." />
   </component>
 </project>

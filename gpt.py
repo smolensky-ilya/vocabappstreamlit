@@ -3,7 +3,7 @@ import g4f
 
 class Gpt:
     def __init__(self):
-        self.model = "llama2-7b"
+        self.model = "gpt-4o"
         self.error_message = 'GPT is unable to give a proper reply :( Please try again.'
         self.message_storage = []
         self.allowed_attempts_to_prompt = 5
