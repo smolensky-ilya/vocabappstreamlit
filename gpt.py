@@ -1,12 +1,13 @@
-import g4f
+import g4f   # ONLY THIS VERSION WORKS!!! g4f==0.1.9.3 and the model name is in the code below!!!
+from time import sleep
 
 
 class Gpt:
     def __init__(self):
-        self.model = "gpt-4o"
+        self.model = "llama2-7b"
         self.error_message = 'GPT is unable to give a proper reply :( Please try again.'
         self.message_storage = []
-        self.allowed_attempts_to_prompt = 5
+        self.allowed_attempts_to_prompt = 1  # 5
 
     def create_a_message(self, prompt, role='user'):
         self.message_storage.append({"role": f"{role}", "content": f"{prompt}"})
@@ -22,9 +23,11 @@ class Gpt:
         current_attempt = 0
         while self.allowed_attempts_to_prompt > current_attempt:
             try:
-                response = g4f.ChatCompletion.create(model=self.model, messages=self.message_storage if
-                                                     prompt is None else [{"role": "user", "content": f"{prompt}"}])
+                response = g4f.ChatCompletion.create(
+                    model=self.model, messages=self.message_storage if
+                    prompt is None else [{"role": "user", "content": f"{prompt}"}])
                 if len(response) == 0:
+                    sleep(10)
                     current_attempt += 1
                     continue
                 self.create_a_message(prompt=response, role='assistant')
